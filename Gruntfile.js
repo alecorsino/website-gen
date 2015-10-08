@@ -62,6 +62,19 @@ module.exports = function (grunt) {
            tasks: ['assemble']
          }
        },
+       browserSync: {
+            dev: {
+                bsFiles: {
+                    src : ['<%= pkg.setup.dist %>/styles/*.css',
+                        '<%= pkg.setup.dist %>/html/*.html'
+                    ]
+                },
+                options: {
+                    watchTask: true,
+                    server: '<%= pkg.setup.dist%>'
+                }
+            }
+        },
 
        clean: {
           dist:{
@@ -74,10 +87,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('assemble');
     grunt.loadNpmTasks('grunt-wiredep');
     grunt.loadNpmTasks('grunt-contrib-sass');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-browser-sync');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
 
     grunt.registerTask('build', ['clean','assemble','sass']);
-    grunt.registerTask('default', ['assemble','sass']);
+    grunt.registerTask('default', ['browserSync', 'watch']);
 
 };
