@@ -1,5 +1,9 @@
 'use strict';
-
+// # Globbing
+// for performance reasons we're only matching one level down:
+// 'test/spec/{,*/}*.js'
+// If you want to recursively match all subfolders, use:
+// 'test/spec/**/*.js'
 
 module.exports = function (grunt) {
 
@@ -17,7 +21,7 @@ module.exports = function (grunt) {
                 partials: '<%= pkg.setup.src %>/templates/partials/*.hbs'
               },
               files: {
-                '<%= pkg.setup.dist %>/': ['<%= pkg.setup.src %>/templates/pages/*.hbs']
+                '<%= pkg.setup.dist %>/html/': ['<%= pkg.setup.src %>/templates/pages/*.hbs']
               }
             }
         },
@@ -37,18 +41,43 @@ module.exports = function (grunt) {
                         ]
             },
             files: {
-              '<%= pkg.setup.src %>/styles/main.css': '<%= pkg.setup.src %>/styles/main.scss'
+              '<%= pkg.setup.dist %>/styles/main.css': '<%= pkg.setup.src %>/styles/main.scss'
             }
           }
-       }
+       },
 
+       watch: {
+         bower: {
+           files: ['bower.json'],
+           tasks: ['wiredep']
+         },
+         sass: {
+           files: ['<%= pkg.setup.src %>/styles/**/*.{scss,sass}',
+                   'bower_components/foundation/scss/{,*/}*.{scss,sass}'
+                  ],
+           tasks: ['sass']
+         },
+         assemble: {
+           files: ['<%= pkg.setup.src %>/templates/**/*.hbs'],
+           tasks: ['assemble']
+         }
+       },
+
+       clean: {
+          dist:{
+            src:['<%= pkg.setup.dist %>/*']
+          }
+        },
 
     });
 
     grunt.loadNpmTasks('assemble');
     grunt.loadNpmTasks('grunt-wiredep');
     grunt.loadNpmTasks('grunt-contrib-sass');
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
+
+    grunt.registerTask('build', ['clean','assemble','sass']);
     grunt.registerTask('default', ['assemble','sass']);
 
 };
