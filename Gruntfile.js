@@ -21,7 +21,7 @@ module.exports = function (grunt) {
                 partials: '<%= pkg.setup.src %>/templates/partials/*.hbs'
               },
               files: {
-                '<%= pkg.setup.dist %>/html/': ['<%= pkg.setup.src %>/templates/pages/*.hbs']
+                '<%= pkg.setup.dist %>/': ['<%= pkg.setup.src %>/templates/pages/*.hbs']
               }
             }
         },
@@ -47,10 +47,6 @@ module.exports = function (grunt) {
        },
 
        watch: {
-         bower: {
-           files: ['bower.json'],
-           tasks: ['wiredep']
-         },
          sass: {
            files: ['<%= pkg.setup.src %>/styles/**/*.{scss,sass}',
                    'bower_components/foundation/scss/{,*/}*.{scss,sass}'
@@ -63,15 +59,19 @@ module.exports = function (grunt) {
          }
        },
        browserSync: {
-            dev: {
+          options: {
+             watchTask: true,
+            //  startPath: "/html/index.html",
+             server:{
+                baseDir: '<%=pkg.setup.dist%>',
+                routes: {'/bower_components': './bower_components'}
+             }
+          },
+          reload: {
                 bsFiles: {
                     src : ['<%= pkg.setup.dist %>/styles/*.css',
-                        '<%= pkg.setup.dist %>/html/*.html'
+                        '<%= pkg.setup.dist %>/*.html'
                     ]
-                },
-                options: {
-                    watchTask: true,
-                    server: '<%= pkg.setup.dist%>'
                 }
             }
         },
@@ -83,13 +83,14 @@ module.exports = function (grunt) {
         },
 
     });
-
-    grunt.loadNpmTasks('assemble');
-    grunt.loadNpmTasks('grunt-wiredep');
-    grunt.loadNpmTasks('grunt-contrib-sass');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-browser-sync');
-    grunt.loadNpmTasks('grunt-contrib-clean');
+    // Automatically load required grunt tasks
+    require('jit-grunt')(grunt);
+    // grunt.loadNpmTasks('assemble');
+    // grunt.loadNpmTasks('grunt-wiredep');
+    // grunt.loadNpmTasks('grunt-contrib-sass');
+    // grunt.loadNpmTasks('grunt-contrib-watch');
+    // grunt.loadNpmTasks('grunt-browser-sync');
+    // grunt.loadNpmTasks('grunt-contrib-clean');
 
 
     grunt.registerTask('build', ['clean','assemble','sass']);

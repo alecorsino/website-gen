@@ -1,2 +1,14 @@
+
+/*
+*:not(body):not(html){
+  box-sizing: border-box;
+  border: 1px dashed #000;
+}
+*/
+
+$row-width: 100%;
+
+$column-gutter: 20px;
+
  @import "settings";
  @import "foundation";
