@@ -68,7 +68,7 @@ module.exports = function (grunt) {
          html: '<%= pkg.setup.dist %>/index.html'
        },
 
-       //Compact the final file
+       //Compact (concat and minyfy) all the scripts and modify final file
       usemin:{html:['<%= pkg.setup.dist %>/index.html']},
 
 

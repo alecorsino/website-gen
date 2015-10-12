@@ -1,13 +1,4 @@
-
-/*
-*:not(body):not(html){
-  box-sizing: border-box;
-  border: 1px dashed #000;
-}
+/* Your custom styles and vendor hacks
+* Use vendor.scss and @Import to load your vendor styles
+* and to keep them separate from SCSS compilation
 */
-.ale {color: red;}
-
-//Foundation Hacks
-$row-width: 100%;
-$column-gutter:55px;
-// $column-gutter: rem-calc(50);
