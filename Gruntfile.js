@@ -16,7 +16,7 @@ module.exports = function (grunt) {
             pages: {
               options: {
                 flatten: true,
-                data: '<%=pkg.setup.src%>/data/*.{json,yml}',
+                data: '<%=pkg.setup.src%>/templates/data/*.{json,yml}',
                 assets: '<%= pkg.setup.dist%>/assets',
                 layout: '<%= pkg.setup.src%>/templates/layouts/default.hbs',
                 partials: '<%= pkg.setup.src%>/templates/partials/*.hbs'
@@ -33,14 +33,19 @@ module.exports = function (grunt) {
           }
         },
 
+        //Add @Import in vendor.scss to load 3rd party styles and add dirs to loadPath
         sass: {
-          dist: {
+          vendor: {
             options: {
+              update: true,
               style: 'expanded',
               loadPath: ['bower_components/foundation/scss',
-                          'bower_components/foundation/scss/foundation'
+                         'bower_components/foundation/scss/foundation'
                         ]
             },
+            files: { '<%= pkg.setup.dist %>/scripts/styles/vendor.css': '<%= pkg.setup.src %>/scripts/styles/vendor.scss' }
+          },
+          custom: {
             files: {
               '<%= pkg.setup.dist %>/scripts/styles/main.css': '<%= pkg.setup.src %>/scripts/styles/main.scss'
             }
@@ -69,8 +74,7 @@ module.exports = function (grunt) {
 
        watch: {
          sass: {
-           files: ['<%= pkg.setup.src %>/scripts/styles/**/*.{scss,sass}',
-                   'bower_components/foundation/scss/{,*/}*.{scss,sass}'
+           files: ['<%= pkg.setup.src %>/scripts/styles/**/*.{scss,sass}'
                   ],
            tasks: ['sass']
          },
@@ -134,7 +138,7 @@ module.exports = function (grunt) {
       'usemin'
     ]);
 
-    //Build the site without compating scripts. Suitable for development 
+    //Build the site without compating scripts. Suitable for development
     grunt.registerTask('local-build', ['clean','assemble','sass','copy:jsDir']);
     grunt.registerTask('dist-build', ['local-build','compact']);
 

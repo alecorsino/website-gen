@@ -7,9 +7,7 @@
 */
 .ale {color: red;}
 
+//Foundation Hacks
 $row-width: 100%;
-
-$column-gutter: 20px;
-
- @import "settings";
- @import "foundation";
+$column-gutter:55px;
+// $column-gutter: rem-calc(50);
