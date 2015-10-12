@@ -81,6 +81,7 @@ module.exports = function (grunt) {
        },
        browserSync: {
           options: {
+            browser: "google chrome",
              watchTask: true,
             //  startPath: "/html/index.html",
              server:{
@@ -95,6 +96,14 @@ module.exports = function (grunt) {
                     ]
                 }
             }
+        },
+        copy: {
+          jsDir: {
+            expand:true,
+            cwd: '<%= pkg.setup.src %>/',
+            src: 'scripts/js/**',
+            dest: '<%= pkg.setup.dist%>/'
+          }
         },
 
        clean: {
@@ -125,7 +134,10 @@ module.exports = function (grunt) {
       'usemin'
     ]);
 
-    grunt.registerTask('build', ['clean','assemble','sass','compact']);
-    grunt.registerTask('default', ['browserSync', 'watch']);
+    //Build the site without compating scripts. Suitable for development 
+    grunt.registerTask('local-build', ['clean','assemble','sass','copy:jsDir']);
+    grunt.registerTask('dist-build', ['local-build','compact']);
+
+    grunt.registerTask('default', ['local-build','browserSync', 'watch']);
 
 };
