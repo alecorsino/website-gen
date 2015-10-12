@@ -16,9 +16,10 @@ module.exports = function (grunt) {
             pages: {
               options: {
                 flatten: true,
-                assets: '<%= pkg.setup.dist %>/assets',
-                layout: '<%= pkg.setup.src %>/templates/layouts/default.hbs',
-                partials: '<%= pkg.setup.src %>/templates/partials/*.hbs'
+                data: '<%=pkg.setup.src%>/data/*.{json,yml}',
+                assets: '<%= pkg.setup.dist%>/assets',
+                layout: '<%= pkg.setup.src%>/templates/layouts/default.hbs',
+                partials: '<%= pkg.setup.src%>/templates/partials/*.hbs'
               },
               files: {
                 '<%= pkg.setup.dist %>/': ['<%= pkg.setup.src %>/templates/pages/*.hbs']
@@ -41,14 +42,34 @@ module.exports = function (grunt) {
                         ]
             },
             files: {
-              '<%= pkg.setup.dist %>/styles/main.css': '<%= pkg.setup.src %>/styles/main.scss'
+              '<%= pkg.setup.dist %>/scripts/styles/main.css': '<%= pkg.setup.src %>/scripts/styles/main.scss'
             }
           }
        },
 
+       // Renames files for browser caching purposes
+       filerev: {
+         dist: {
+           src: [
+             '<%= pkg.setup.dist %>/scripts/{,*/}*.{css,js}'
+           ]
+         }
+       },
+
+       useminPrepare: {
+         options: {
+           dest: '<%= pkg.setup.dist %>'
+         },
+         html: '<%= pkg.setup.dist %>/index.html'
+       },
+
+       //Compact the final file
+      usemin:{html:['<%= pkg.setup.dist %>/index.html']},
+
+
        watch: {
          sass: {
-           files: ['<%= pkg.setup.src %>/styles/**/*.{scss,sass}',
+           files: ['<%= pkg.setup.src %>/scripts/styles/**/*.{scss,sass}',
                    'bower_components/foundation/scss/{,*/}*.{scss,sass}'
                   ],
            tasks: ['sass']
@@ -84,7 +105,9 @@ module.exports = function (grunt) {
 
     });
     // Automatically load required grunt tasks
-    require('jit-grunt')(grunt);
+    require('jit-grunt')(grunt, {
+      useminPrepare: 'grunt-usemin'
+    });
     // grunt.loadNpmTasks('assemble');
     // grunt.loadNpmTasks('grunt-wiredep');
     // grunt.loadNpmTasks('grunt-contrib-sass');
@@ -92,8 +115,17 @@ module.exports = function (grunt) {
     // grunt.loadNpmTasks('grunt-browser-sync');
     // grunt.loadNpmTasks('grunt-contrib-clean');
 
+    // Compact all scripts task
+    grunt.registerTask('compact', [
+      'useminPrepare',
+      'concat:generated',
+      'cssmin:generated',
+      'uglify:generated',
+      'filerev',
+      'usemin'
+    ]);
 
-    grunt.registerTask('build', ['clean','assemble','sass']);
+    grunt.registerTask('build', ['clean','assemble','sass','compact']);
     grunt.registerTask('default', ['browserSync', 'watch']);
 
 };
