@@ -81,6 +81,10 @@ module.exports = function (grunt) {
          assemble: {
            files: ['<%= pkg.setup.src %>/templates/**/*.hbs'],
            tasks: ['assemble']
+         },
+         assets:{
+           files: ['<%= pkg.setup.src %>/assets/**'],
+           tasks: ['copy:assets']
          }
        },
        browserSync: {
@@ -107,7 +111,14 @@ module.exports = function (grunt) {
             cwd: '<%= pkg.setup.src %>/',
             src: 'scripts/js/**',
             dest: '<%= pkg.setup.dist%>/'
+          },
+          assets: {
+            expand:true,
+            cwd: '<%= pkg.setup.src %>/',
+            src: 'assets/**',
+            dest: '<%= pkg.setup.dist%>/'
           }
+
         },
 
        clean: {
@@ -139,7 +150,7 @@ module.exports = function (grunt) {
     ]);
 
     //Build the site without compating scripts. Suitable for development
-    grunt.registerTask('local-build', ['clean','assemble','sass','copy:jsDir']);
+    grunt.registerTask('local-build', ['clean','assemble','sass','copy']);
     grunt.registerTask('dist-build', ['local-build','compact']);
 
     grunt.registerTask('default', ['local-build','browserSync', 'watch']);
