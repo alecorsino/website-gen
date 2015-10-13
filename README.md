@@ -5,7 +5,8 @@ Website builder - HTML5, Foundation 5
 ### What is this repository for? ###
 
 * A Node.js project with Grunt tasks to create a website
-* Uses Foundation 5 responsive layout grid
+* Uses Assemble as a template engine.
+* Uses Foundation 5 responsive layout grid.
 * Browser Sync with to serve the website during development.
 * Bower package dependencies and wiredep to inject them.
 
