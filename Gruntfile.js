@@ -51,7 +51,25 @@ module.exports = function (grunt) {
             }
           }
        },
-
+       postcss: {
+             options: {
+               map: true,
+               processors: [
+                 // Add vendor prefixed styles
+                 require('autoprefixer')({
+                   browsers: ['> 1%', 'last 2 versions', 'Firefox ESR']
+                 })
+               ]
+             },
+             dist: {
+               files: [{
+                 expand: true,
+                 cwd: '<%= pkg.setup.dist %>/scripts/styles',
+                 src: '{,*/}*.css',
+                 dest: '<%= pkg.setup.dist %>/scripts/styles'
+               }]
+             }
+           },
        // Renames files for browser caching purposes
        filerev: {
          dist: {
@@ -150,7 +168,7 @@ module.exports = function (grunt) {
     ]);
 
     //Build the site without compating scripts. Suitable for development
-    grunt.registerTask('local-build', ['clean','assemble','sass','copy']);
+    grunt.registerTask('local-build', ['clean','assemble','sass','postcss','copy']);
     grunt.registerTask('dist-build', ['local-build','compact']);
 
     grunt.registerTask('default', ['local-build','browserSync', 'watch']);

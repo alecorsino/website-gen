@@ -2,3 +2,11 @@
 * Use vendor.scss and @Import to load your vendor styles
 * and to keep them separate from SCSS compilation
 */
+
+body {
+  // background: url(../../assets/images/fallback.png);
+  background-image: url(../../assets/images/bg3.svg);
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-size: 100%;
+}
