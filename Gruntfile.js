@@ -35,14 +35,15 @@ module.exports = function (grunt) {
 
         //Add @Import in vendor.scss to load 3rd party styles and add dirs to loadPath
         sass: {
+          options: {
+            update: true,
+            style: 'expanded',
+            loadPath: ['bower_components/foundation/scss',
+                       'bower_components/foundation/scss/foundation'
+                      ]
+          },
           vendor: {
-            options: {
-              update: true,
-              style: 'expanded',
-              loadPath: ['bower_components/foundation/scss',
-                         'bower_components/foundation/scss/foundation'
-                        ]
-            },
+
             files: { '<%= pkg.setup.dist %>/scripts/styles/vendor.css': '<%= pkg.setup.src %>/scripts/styles/vendor.scss' }
           },
           custom: {
@@ -103,6 +104,10 @@ module.exports = function (grunt) {
          assets:{
            files: ['<%= pkg.setup.src %>/assets/**'],
            tasks: ['copy:assets']
+         },
+         js:{
+           files: ['<%= pkg.setup.src %>/scripts/js/**'],
+           tasks: ['copy:jsDir']
          }
        },
        browserSync: {
@@ -117,7 +122,8 @@ module.exports = function (grunt) {
           },
           reload: {
                 bsFiles: {
-                    src : ['<%= pkg.setup.dist %>/styles/*.css',
+                    src : ['<%= pkg.setup.dist %>/scripts/styles/*.css',
+                    '<%= pkg.setup.dist %>/scripts/js/*.js',
                         '<%= pkg.setup.dist %>/*.html'
                     ]
                 }
