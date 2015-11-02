@@ -16,7 +16,7 @@ Website builder - HTML5, Foundation 5, SASS.
 ### How do I get set up? ###
 
 * Clone the project template repo to your local environment.
-  - Delete .git folder and run git init to clean history.
+  - git clone --depth 1 [repoUrl] OR Delete .git folder and run git init to clean the history.
   - change remote repo: either run git remote add origin <server> or change [remote "origin"] url =
 * run: npm install
 * run: bower install
